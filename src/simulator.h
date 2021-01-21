@@ -29,10 +29,13 @@ class Simulator { //Simulator class definition
     double rod_mass_;
     double rod_length_;
 		double pendulum_mass_;
-		double theta_;		// pendulum angle
+		double theta_;  // pendulum angle
 		double theta_dot_;	// pendulum velocity
-		double theta_ddot_;  		// pendulum acceleration
-		void outputCallback(const geometry_msgs::Wrench &wrench);
+		double theta_ddot_;  // pendulum acceleration
+		double momentOfInertia_;  // Moment of inertia
+		double mu_f_;  		// pendulum friction coefficient
+
+		void controlOutputCallback(const geometry_msgs::Wrench &wrench);
 	public:
 		Simulator(ros::NodeHandle *nodehandle);
 		void publishControlInput();
