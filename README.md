@@ -17,7 +17,7 @@ This package simulates an inverted pendulum connected to a motor with a fixed ar
   - Visualization_msgs
 
 * Note:
-  No libraries is needed to install. The standard libraries is enough.
+  No additional library is needed to install.
 
 ## Launch: ##
 
