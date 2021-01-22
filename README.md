@@ -2,7 +2,7 @@
 
 This package simulates an inverted pendulum connected to a motor with a fixed arm and controls it using torque into a stable upright position.
 
-![inverted pendulum demo](demo/demo.gif)
+![inverted pendulum demo](demo.gif)
 
 ## Structure: ##
 
