@@ -1,7 +1,17 @@
 <?xml version="1.0"?>
 <launch>
 	<node name="visualization" pkg="rviz" type="rviz" output="screen" args="-d $(find pendulum_control)/launch/inverted_pendulum.rviz"/>
-	<node name="simulator" pkg="pendulum_control" type="simulator"/>
-	<node name="controller" pkg="pendulum_control" type="controller"/>
+	<node pkg="tf" type="static_transform_publisher" name="base_to_world" args="0 0 0 0 0 0 /world /base 0" />
+	<node name="simulator" pkg="pendulum_control" type="simulator">
+		<param name="mass_rod" value="0.2" type="double"/>
+		<param name="length_rod" value="0.9" type="double"/>
+		<param name="mass_pendulum" value="0.9" type="double"/>
+		<param name="friction" value="0.2" type="double"/>
+	</node>
+	<node name="controller" pkg="pendulum_control" type="controller">
+		<param name="K_p" value="11.0" type="double"/>
+		<param name="K_d" value="2.0" type="double"/>
+		<param name="desired_angel" value="3.1415" type="double"/>
+	</node>
 
 </launch>

@@ -28,11 +28,15 @@ Simulator::Simulator(ros::NodeHandle *nodehandle):
     mu_f_(0.2),
 		nh_(*nodehandle)
 {
+  nh_.getParam("mass_pendulum", pendulum_mass_);
+	nh_.getParam("mass_rod", rod_mass_);
+	nh_.getParam("length_rod", rod_length_);
+	nh_.getParam("friction", mu_f_);
 	t_ = ros::Time::now();
 	momentOfInertia_ = rod_length_*rod_length_*(pendulum_mass_+rod_mass_/3);
-	viz_publisher_ = nh_.advertise<visualization_msgs::MarkerArray>("/pendulum_viz", 100);
-  input_publisher_ = nh_.advertise<pendulum_control::control_input>("/control_input", 100);
-	output_subscriber_ =nh_.subscribe("/control_output", 100, &Simulator::controlOutputCallback, this);
+	viz_publisher_ = nh_.advertise<visualization_msgs::MarkerArray>("/pendulum_viz", 10);
+  input_publisher_ = nh_.advertise<pendulum_control::control_input>("/control_input", 10);
+	output_subscriber_ =nh_.subscribe("/control_output", 10, &Simulator::controlOutputCallback, this);
 }
 
 void Simulator::publishVizPendulum(){

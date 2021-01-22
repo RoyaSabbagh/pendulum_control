@@ -22,8 +22,11 @@ Controller::Controller(ros::NodeHandle *nodehandle):
 		theta_des_(PI),
 		nh_(*nodehandle)
 {
-	output_publisher_ = nh_.advertise<geometry_msgs::Wrench>("/control_output", 100);
-	input_subscriber_ = nh_.subscribe("/control_input", 100, &Controller::controlInputCallback, this);
+  nh_.getParam("K_p", Kp_);
+	nh_.getParam("K_d", Kd_);
+	nh_.getParam("desired_angel", theta_des_);
+	output_publisher_ = nh_.advertise<geometry_msgs::Wrench>("/control_output", 10);
+	input_subscriber_ = nh_.subscribe("/control_input", 10, &Controller::controlInputCallback, this);
 }
 
 void Controller::controlInputCallback(const pendulum_control::control_input &input)
