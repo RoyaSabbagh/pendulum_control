@@ -1,7 +1,7 @@
 /*
- *file_name.py
+ *simulator.cpp
  *
- *Implementation of ...
+ *Implementation of inverted pendulum simulation in rviz.
  *
  *Author: Roya Sabbagh Novin (sabbaghnovin@gmail.com)
  *
@@ -20,8 +20,8 @@ double wrapAngel(double theta){ //This is to wrap an angle to make sure it is in
 
 Simulator::Simulator(ros::NodeHandle *nodehandle):
     rod_mass_(0.2),
-    rod_length_(1.0),
-		pendulum_mass_(1.0),
+    rod_length_(0.9),
+		pendulum_mass_(0.9),
 		theta_(PI/2),
 		theta_dot_(0.0),
 		theta_ddot_(0.0),
@@ -119,8 +119,11 @@ void Simulator::publishControlInput(){
 void Simulator::controlOutputCallback(const geometry_msgs::Wrench &wrench)
 {
 	ros::Duration dt = ros::Time::now() - t_;
-	theta_ddot_ = - rod_length_*(pendulum_mass_+rod_mass_/2) * 9.81 * sin(theta_) / momentOfInertia_ - mu_f_ * theta_dot_ / momentOfInertia_;
-	theta_dot_ = theta_dot_ + theta_ddot_ * dt.toSec();
+  // Obtain acceleration from applied torque
+	theta_ddot_ = wrench.torque.z / momentOfInertia_- rod_length_*(pendulum_mass_+rod_mass_/2) * 9.81 * sin(theta_) / momentOfInertia_ - mu_f_ * theta_dot_ / momentOfInertia_;
+  // Velocity update
+  theta_dot_ = theta_dot_ + theta_ddot_ * dt.toSec();
+  // Angel update
 	theta_ = wrapAngel(theta_ + theta_dot_ * dt.toSec());
 	t_ = ros::Time::now();
 }
@@ -134,7 +137,7 @@ int main(int argc, char **argv)
 	ros::init(argc, argv, "pendulumSimulator");
 	ros::NodeHandle nh("~");;
 	Simulator simluator(&nh);
-	ros::Rate loop_rate(1000);
+	ros::Rate loop_rate(10);
 	while(ros::ok())
 	{
     simluator.publishControlInput();

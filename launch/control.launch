@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <launch>
 	<node name="visualization" pkg="rviz" type="rviz" output="screen" args="-d $(find pendulum_control)/launch/inverted_pendulum.rviz"/>
-	<node pkg="tf" type="static_transform_publisher" name="base_to_world" args="0 0 0 0 0 0 /world /base 30" />
 	<node name="simulator" pkg="pendulum_control" type="simulator"/>
 	<node name="controller" pkg="pendulum_control" type="controller"/>
 

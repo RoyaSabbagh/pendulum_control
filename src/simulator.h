@@ -1,7 +1,4 @@
 /*
- *simulator.h
- *
- *Implementation of ...
  *
  *Author: Roya Sabbagh Novin (sabbaghnovin@gmail.com)
  *
@@ -24,7 +21,7 @@ class Simulator { //Simulator class definition
     ros::Time t_;
 		ros::Publisher input_publisher_;  // control_input
     ros::Subscriber output_subscriber_;  // control_output
-		ros::Publisher viz_publisher_;  // vis_pendulum
+		ros::Publisher viz_publisher_;  // visualization
 
     double rod_mass_;
     double rod_length_;

@@ -1,7 +1,7 @@
 /*
- *file_name.py
+ *controller.cpp
  *
- *Implementation of ...
+ *Implementation of PD contoller for an inverted pendulum.
  *
  *Author: Roya Sabbagh Novin (sabbaghnovin@gmail.com)
  *
@@ -10,9 +10,15 @@
 #include "controller.h"
 #define PI 3.1415
 
+double wrapAngel(double theta){ //This is to wrap an angle to make sure it is in the range of [-pi, pi]
+    if (theta < -PI) theta += 2*PI;
+    else if (theta > PI) theta -= 2*PI;
+    return theta;
+}
+
 Controller::Controller(ros::NodeHandle *nodehandle):
-		Kp_(10.0),
-		Kd_(1.0),
+		Kp_(10.0), //larger Kp results in more overshoot, smaller Kp results in steady state error
+		Kd_(2.0), //larger Kd results in overdamping, smaller Kd results in oscillation
 		theta_des_(PI),
 		nh_(*nodehandle)
 {
@@ -22,8 +28,13 @@ Controller::Controller(ros::NodeHandle *nodehandle):
 
 void Controller::controlInputCallback(const pendulum_control::control_input &input)
 {
+
+  double err = wrapAngel(theta_des_ - input.theta);
+	double d_err =  -input.theta_dot;
+	double u = Kp_*err + Kd_*d_err;
+
 	geometry_msgs::Wrench wrench;
-	wrench.torque.z = 0;
+	wrench.torque.z = u;
 	output_publisher_.publish(wrench);
 }
 
